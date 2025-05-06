@@ -34,7 +34,6 @@
     ; Get ExitProcess into rax
     call rax
 
-    ; чуть-чуть выровнять стек, вернуть управление
     ret
 
 // SHELLCODE_END
