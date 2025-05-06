@@ -5,9 +5,7 @@
     ;
     push rdx
     xor rcx, rcx
-    mov rdx, (dll_list_ptr)         ; stub: адрес списка модулей PEB
-    ; … тут код для перебора Export Directory kernel32.dll …
-    ; [для краткости опущен; он должен получить адрес LoadLibraryA в rax и GetProcAddress в rbx]
+    mov rdx, (dll_list_ptr)         ; stub: PEB
 
     ;
     lea rcx, [rip + urlmon_str]
