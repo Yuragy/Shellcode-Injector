@@ -14,19 +14,19 @@ ASMS    := Callbacks.asm
 all: $(OUT)
 
 Shellcode.h: $(TEMPLATE) generate_shellcode_header.py
-	@echo "[*] Генерация Shellcode.h"
+	@echo "[*] Shellcode.h"
 	$(PY) generate_shellcode_header.py $(TEMPLATE) $@
 
 Callbacks.obj: $(ASMS)
-	@echo "[*] Ассемблируем Callbacks.asm"
+	@echo "[*] Callbacks.asm"
 	$(ASM) $(ASMFLAGS) $< -o $@
 
 main.obj: main.cpp include/PEB.h include/Callbacks.h Shellcode.h
-	@echo "[*] Компилируем main.cpp"
+	@echo "[*] main.cpp"
 	$(CXX) $(CXXFLAGS) /c main.cpp /Fo$@
 
 $(OUT): Shellcode.h Callbacks.obj main.obj
-	@echo "[*] Линкуем $(OUT)"
+	@echo "[*] $(OUT)"
 	$(CXX) $(CXXFLAGS) Callbacks.obj main.obj /link /OUT:$(OUT)
 
 clean:
