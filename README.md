@@ -39,4 +39,8 @@ A PoC shellcode injector using clean syscalls to bypass user-mode hooks in ntdll
 4. Run the injector:
    injector.exe
 
-## This is just a demonstration of a training manual for malware researchers
+## 🚫 Disclaimer
+
+This repository is provided for **educational purposes only** and intended for **authorized security research**.
+Use of these materials in unauthorized or illegal activities is **strictly prohibited**.
+
