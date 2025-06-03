@@ -1,46 +1,69 @@
 # Shellcode Injector
-A PoC shellcode injector using clean syscalls to bypass user-mode hooks in ntdll.dll.
 
-### Goals
-- Activity obfuscation  
-- Demonstrate injecting shellcode into a process via raw syscall; ret stubs from ntdll.dll  
-- Bypass user-mode hooks on Win32 APIs (LoadLibrary, VirtualAlloc, WriteProcessMemory)  
-- Automatically generate and insert a shellcode payload to download and execute a PE file  
+A proof-of-concept **shellcode injector** that uses *clean syscalls* to bypass user-mode hooks in **`ntdll.dll`**.
 
-### How It Works
-- Uses the Windows Thread Pool API to “hide” the call stack: instead of a direct syscall from code, the call originates from a trusted region inside ntdll tpWorker.  
-- No direct native API calls are made—instead, jmp to a syscall stub found in ntdll.
+## 🎯 Goals
 
-### Project Files
-- include/PEB.h — Definitions for PEB/TEB structures, LDR_MODULE  
-- include/Callbacks.h — Prototypes for callbacks and argument structs for three syscalls  
-- Callbacks.asm — NASM routines: locate raw syscall stubs and unpack arguments → syscall; ret  
-- Shellcode.h.template — DSL (Intel syntax) between SHELLCODE_START/SHELLCODE_END markers  
-- generate_shellcode_header.py — Assembles the DSL from the template and overwrites Shellcode.h with a byte array  
-- main.cpp — C++ wrapper EnableDebugPrivilege, SSN lookup, ThreadPool callbacks, wrappers for NtAllocateVirtualMemory, NtWriteVirtualMemory, NtCreateThreadEx  
-- Makefile — Automation for:  
-  1. Generating Shellcode.h  
-  2. Assembling ASM routines  
-  3. Compiling and linking into injector.exe
+- **Activity obfuscation**  
+- Inject shellcode into a target process via **raw syscalls** (ret stubs from `ntdll.dll`)  
+- **Bypass** common user-mode hooks on Win32 APIs (`LoadLibrary`, `VirtualAlloc`, `WriteProcessMemory`, …)  
+- **Auto-generate** & embed a shellcode payload that **downloads and executes a PE file**  
 
-### Technologies & Dependencies
-- Windows x64 MSVC / Visual Studio Build Tools 
-- NASM -f win64  
-- Python 3.x + keystone-engine  
+---
+
+## 🛠️ How It Works
+
+1. Leverages the **Windows Thread Pool API** to *hide the call-stack*:  
+   - The syscall appears to originate from a *trusted* region inside **`ntdll!TpWorker`** rather than from our code.  
+2. No direct native API calls are made; instead, the injector **jumps to syscall stubs** discovered in `ntdll.dll`.
+
+---
+
+## 📁 Project Files
+
+| Path | Purpose |
+|------|---------|
+| `include/PEB.h` | Struct definitions for **PEB / TEB / LDR_MODULE** |
+| `include/Callbacks.h` | Prototypes & argument structs for the three syscalls |
+| `Callbacks.asm` | NASM routines: locate raw syscall stubs → unpack args → `syscall; ret` |
+| `Shellcode.h.template` | DSL (Intel syntax) between `SHELLCODE_START / END` markers |
+| `generate_shellcode_header.py` | Assembles the DSL → overwrites **`Shellcode.h`** with a byte array |
+| `main.cpp` | C++ wrapper: `EnableDebugPrivilege`, SSN lookup, Thread Pool callbacks, wrappers for<br>`NtAllocateVirtualMemory`, `NtWriteVirtualMemory`, `NtCreateThreadEx` |
+| `Makefile` | Automation: <br>1️⃣ Generate `Shellcode.h`<br>2️⃣ Assemble ASM routines<br>3️⃣ Compile & link → **`injector.exe`** |
+
+---
+
+## ⚙️ Technologies & Dependencies
+
+- **Windows x64** – MSVC / Visual Studio Build Tools  
+- **NASM** `-f win64`  
+- **Python 3.x** + **Keystone-engine**  
+  ```bash
   pip install keystone-engine
 
-### Build & Run
 
-1. Install dependencies NASM, MSVC, Python + Keystone 
-2. Generate Shellcode.h from the template:
-   python generate_shellcode_header.py Shellcode.h.template Shellcode.h
-3. Build the project:
-   make
-4. Run the injector:
-   injector.exe
+---
+
+## 🚀 Build & Run
+
+```bash
+# 1) Install NASM, MSVC, Python + Keystone beforehand
+
+# 2) Generate Shellcode.h from the template
+python generate_shellcode_header.py Shellcode.h.template Shellcode.h
+
+# 3) Build everything
+make
+
+# 4) Launch the injector
+injector.exe
+```
+
+---
 
 ## 🚫 Disclaimer
 
 This repository is provided for **educational purposes only** and intended for **authorized security research**.
 Use of these materials in unauthorized or illegal activities is **strictly prohibited**.
+
 
