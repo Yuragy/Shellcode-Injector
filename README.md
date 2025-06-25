@@ -2,7 +2,7 @@
 
 A proof-of-concept **shellcode injector** that uses *clean syscalls* to bypass user-mode hooks in **`ntdll.dll`**.
 
-## 🎯 Goals
+## Goals
 
 - **Activity obfuscation**  
 - Inject shellcode into a target process via **raw syscalls** (ret stubs from `ntdll.dll`)  
@@ -11,7 +11,7 @@ A proof-of-concept **shellcode injector** that uses *clean syscalls* to bypass u
 
 ---
 
-## 🛠️ How It Works
+##  How It Works
 
 1. Leverages the **Windows Thread Pool API** to *hide the call-stack*:  
    - The syscall appears to originate from a *trusted* region inside **`ntdll!TpWorker`** rather than from our code.  
@@ -19,7 +19,7 @@ A proof-of-concept **shellcode injector** that uses *clean syscalls* to bypass u
 
 ---
 
-## 📁 Project Files
+## Project Files
 
 | Path | Purpose |
 |------|---------|
@@ -29,11 +29,11 @@ A proof-of-concept **shellcode injector** that uses *clean syscalls* to bypass u
 | `Shellcode.h.template` | DSL (Intel syntax) between `SHELLCODE_START / END` markers |
 | `generate_shellcode_header.py` | Assembles the DSL → overwrites **`Shellcode.h`** with a byte array |
 | `main.cpp` | C++ wrapper: `EnableDebugPrivilege`, SSN lookup, Thread Pool callbacks, wrappers for<br>`NtAllocateVirtualMemory`, `NtWriteVirtualMemory`, `NtCreateThreadEx` |
-| `Makefile` | Automation: <br>1️⃣ Generate `Shellcode.h`<br>2️⃣ Assemble ASM routines<br>3️⃣ Compile & link → **`injector.exe`** |
+| `Makefile` | Automation: <br>1 Generate `Shellcode.h`<br>2 Assemble ASM routines<br>3 Compile & link → **`injector.exe`** |
 
 ---
 
-## ⚙️ Technologies & Dependencies
+##  Technologies & Dependencies
 
 - **Windows x64** – MSVC / Visual Studio Build Tools  
 - **NASM** `-f win64`  
@@ -44,7 +44,7 @@ A proof-of-concept **shellcode injector** that uses *clean syscalls* to bypass u
 
 ---
 
-## 🚀 Build & Run
+##  Build & Run
 
 ```bash
 # 1) Install NASM, MSVC, Python + Keystone beforehand
