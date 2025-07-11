@@ -1,12 +1,12 @@
 # Shellcode Injector
 
-A proof-of-concept **shellcode injector** that uses *clean syscalls* to bypass user-mode hooks in **`ntdll.dll`**.
+A proof-of-concept **shellcode injector** that uses *clean syscalls* to bypass user-mode hooks in **ntdll.dll**.
 
 ## Goals
 
 - **Activity obfuscation**  
-- Inject shellcode into a target process via **raw syscalls** (ret stubs from `ntdll.dll`)  
-- **Bypass** common user-mode hooks on Win32 APIs (`LoadLibrary`, `VirtualAlloc`, `WriteProcessMemory`, …)  
+- Inject shellcode into a target process via **raw syscalls**  
+- **Bypass** common user-mode hooks on Win32 APIs (LoadLibrary, VirtualAlloc, WriteProcessMemory)  
 - **Auto-generate** & embed a shellcode payload that **downloads and executes a PE file**  
 
 ---
@@ -14,7 +14,7 @@ A proof-of-concept **shellcode injector** that uses *clean syscalls* to bypass u
 ##  How It Works
 
 1. Leverages the **Windows Thread Pool API** to *hide the call-stack*:  
-   - The syscall appears to originate from a *trusted* region inside **`ntdll!TpWorker`** rather than from our code.  
+   - The syscall appears to originate from a *trusted* region inside **ntdll!TpWorker** rather than from our code.  
 2. No direct native API calls are made; instead, the injector **jumps to syscall stubs** discovered in `ntdll.dll`.
 
 ---
@@ -26,10 +26,10 @@ A proof-of-concept **shellcode injector** that uses *clean syscalls* to bypass u
 | `include/PEB.h` | Struct definitions for **PEB / TEB / LDR_MODULE** |
 | `include/Callbacks.h` | Prototypes & argument structs for the three syscalls |
 | `Callbacks.asm` | NASM routines: locate raw syscall stubs → unpack args → `syscall; ret` |
-| `Shellcode.h.template` | DSL (Intel syntax) between `SHELLCODE_START / END` markers |
-| `generate_shellcode_header.py` | Assembles the DSL → overwrites **`Shellcode.h`** with a byte array |
-| `main.cpp` | C++ wrapper: `EnableDebugPrivilege`, SSN lookup, Thread Pool callbacks, wrappers for<br>`NtAllocateVirtualMemory`, `NtWriteVirtualMemory`, `NtCreateThreadEx` |
-| `Makefile` | Automation: <br>1 Generate `Shellcode.h`<br>2 Assemble ASM routines<br>3 Compile & link → **`injector.exe`** |
+| `Shellcode.h.template` | DSL (Intel syntax) between SHELLCODE_START / END markers |
+| `generate_shellcode_header.py` | Assembles the DSL → overwrites **Shellcode.h** with a byte array |
+| `main.cpp` | C++ wrapper: `EnableDebugPrivilege`, SSN lookup, Thread Pool callbacks, wrappers for<br>NtAllocateVirtualMemory, NtWriteVirtualMemory, NtCreateThreadEx |
+| `Makefile` | Automation: <br>1 Generate `Shellcode.h`<br>2 Assemble ASM routines<br>3 Compile & link → **injector.exe** |
 
 ---
 
@@ -46,16 +46,16 @@ A proof-of-concept **shellcode injector** that uses *clean syscalls* to bypass u
 
 ##  Build & Run
 
-```bash
-# 1) Install NASM, MSVC, Python + Keystone beforehand
+```
+1) Install NASM, MSVC, Python + Keystone beforehand
 
-# 2) Generate Shellcode.h from the template
+2) Generate Shellcode.h from the template
 python generate_shellcode_header.py Shellcode.h.template Shellcode.h
 
-# 3) Build everything
+3) Build everything
 make
 
-# 4) Launch the injector
+4) Launch the injector
 injector.exe
 ```
 
