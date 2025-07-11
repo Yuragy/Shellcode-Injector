@@ -1,21 +1,21 @@
 # Shellcode Injector
 
-A proof-of-concept **shellcode injector** that uses *clean syscalls* to bypass user-mode hooks in ntdll
+Proof-of-concept **shellcode injector** that uses clean syscalls to bypass user-mode hooks in ntdll
 
 ## Goals
 
 - **Activity obfuscation**  
 - Inject shellcode into a target process via raw syscalls  
-- **Bypass** common user-mode hooks on Win32 APIs LoadLibrary, VirtualAlloc, WriteProcessMemory  
+- Bypass common user-mode hooks on Win32 APIs LoadLibrary, VirtualAlloc, WriteProcessMemory  
 - **Auto-generate** & embed a shellcode payload that downloads and executes a PE file  
 
 ---
 
 ##  How It Works
 
-1. Leverages the **Windows Thread Pool API** to *hide the call-stack*:  
-   - The syscall appears to originate from a *trusted* region inside **ntdll!TpWorker** rather than from our code.  
-2. No direct native API calls are made; instead, the injector **jumps to syscall stubs** discovered in `ntdll.dll`.
+1. Leverages the Windows Thread Pool API to hide the call-stack:  
+   - The syscall appears to originate from a trusted region inside ntdll!TpWorker rather than from our code.  
+2. No direct native API calls are made; instead, the injector jumps to syscall stubs discovered in ntdll.
 
 ---
 
@@ -36,11 +36,8 @@ A proof-of-concept **shellcode injector** that uses *clean syscalls* to bypass u
 ##  Technologies & Dependencies
 
 - **Windows x64** – MSVC / Visual Studio Build Tools  
-- **NASM** `-f win64`  
-- **Python 3.x** + **Keystone-engine**  
-  ```bash
-  pip install keystone-engine
-
+- **NASM** -f win64  
+- **Python 3.x** + **Keystone-engine**  pip install keystone-engine
 
 ---
 
