@@ -1,13 +1,13 @@
 # Shellcode Injector
 
-A proof-of-concept **shellcode injector** that uses *clean syscalls* to bypass user-mode hooks in **ntdll.dll**.
+A proof-of-concept **shellcode injector** that uses *clean syscalls* to bypass user-mode hooks in ntdll
 
 ## Goals
 
 - **Activity obfuscation**  
-- Inject shellcode into a target process via **raw syscalls**  
-- **Bypass** common user-mode hooks on Win32 APIs (LoadLibrary, VirtualAlloc, WriteProcessMemory)  
-- **Auto-generate** & embed a shellcode payload that **downloads and executes a PE file**  
+- Inject shellcode into a target process via raw syscalls  
+- **Bypass** common user-mode hooks on Win32 APIs LoadLibrary, VirtualAlloc, WriteProcessMemory  
+- **Auto-generate** & embed a shellcode payload that downloads and executes a PE file  
 
 ---
 
@@ -25,11 +25,11 @@ A proof-of-concept **shellcode injector** that uses *clean syscalls* to bypass u
 |------|---------|
 | `include/PEB.h` | Struct definitions for **PEB / TEB / LDR_MODULE** |
 | `include/Callbacks.h` | Prototypes & argument structs for the three syscalls |
-| `Callbacks.asm` | NASM routines: locate raw syscall stubs → unpack args → `syscall; ret` |
+| `Callbacks.asm` | NASM routines: locate raw syscall stubs → unpack args → syscall; ret |
 | `Shellcode.h.template` | DSL (Intel syntax) between SHELLCODE_START / END markers |
 | `generate_shellcode_header.py` | Assembles the DSL → overwrites **Shellcode.h** with a byte array |
-| `main.cpp` | C++ wrapper: `EnableDebugPrivilege`, SSN lookup, Thread Pool callbacks, wrappers for<br>NtAllocateVirtualMemory, NtWriteVirtualMemory, NtCreateThreadEx |
-| `Makefile` | Automation: <br>1 Generate `Shellcode.h`<br>2 Assemble ASM routines<br>3 Compile & link → **injector.exe** |
+| `main.cpp` | C++ wrapper: EnableDebugPrivilege, SSN lookup, Thread Pool callbacks, wrappers for<br>NtAllocateVirtualMemory, NtWriteVirtualMemory, NtCreateThreadEx |
+| `Makefile` | Automation: <br>1 Generate Shellcode.h <br>2 Assemble ASM routines<br>3 Compile & link → **injector.exe** |
 
 ---
 
@@ -46,7 +46,6 @@ A proof-of-concept **shellcode injector** that uses *clean syscalls* to bypass u
 
 ##  Build & Run
 
-```
 1) Install NASM, MSVC, Python + Keystone beforehand
 
 2) Generate Shellcode.h from the template
@@ -57,7 +56,6 @@ make
 
 4) Launch the injector
 injector.exe
-```
 
 ---
 
