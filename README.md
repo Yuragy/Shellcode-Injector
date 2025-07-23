@@ -23,13 +23,13 @@ Proof-of-concept **shellcode injector** that uses clean syscalls to bypass user-
 
 | Path | Purpose |
 |------|---------|
-| `include/PEB.h` | Struct definitions for **PEB / TEB / LDR_MODULE** |
+| `include/PEB.h` | Struct definitions for PEB / TEB / LDR_MODULE |
 | `include/Callbacks.h` | Prototypes & argument structs for the three syscalls |
 | `Callbacks.asm` | NASM routines: locate raw syscall stubs → unpack args → syscall; ret |
 | `Shellcode.h.template` | DSL (Intel syntax) between SHELLCODE_START / END markers |
-| `generate_shellcode_header.py` | Assembles the DSL → overwrites **Shellcode.h** with a byte array |
+| `generate_shellcode_header.py` | Assembles the DSL → overwrites Shellcode.h with a byte array |
 | `main.cpp` | C++ wrapper: EnableDebugPrivilege, SSN lookup, Thread Pool callbacks, wrappers for<br>NtAllocateVirtualMemory, NtWriteVirtualMemory, NtCreateThreadEx |
-| `Makefile` | Automation: <br>1 Generate Shellcode.h <br>2 Assemble ASM routines<br>3 Compile & link → **injector.exe** |
+| `Makefile` | Automation: <br>1 Generate Shellcode.h <br>2 Assemble ASM routines<br>3 Compile & link → injector.exe |
 
 ---
 
@@ -37,7 +37,7 @@ Proof-of-concept **shellcode injector** that uses clean syscalls to bypass user-
 
 - **Windows x64** – MSVC / Visual Studio Build Tools  
 - **NASM** -f win64  
-- **Python 3.x** + **Keystone-engine**  pip install keystone-engine
+- **Python 3** + **Keystone-engine**  pip install keystone-engine
 
 ---
 
@@ -58,7 +58,7 @@ injector.exe
 
 ## 🚫 Disclaimer
 
-This repository is provided for **educational purposes only** and intended for **authorized security research**.
-Use of these materials in unauthorized or illegal activities is **strictly prohibited**.
+This repository is provided for educational purposes only and intended for authorized security research.
+Use of these materials in unauthorized or illegal activities is strictly prohibited.
 
 
