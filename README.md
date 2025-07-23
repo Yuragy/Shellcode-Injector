@@ -1,13 +1,13 @@
 # Shellcode Injector
 
-Proof-of-concept **shellcode injector** that uses clean syscalls to bypass user-mode hooks in ntdll
+Proof of concept shellcode injector that uses clean syscalls to bypass user-mode hooks in ntdll
 
 ## Goals
 
 - **Activity obfuscation**  
 - Inject shellcode into a target process via raw syscalls  
 - Bypass common user-mode hooks on Win32 APIs LoadLibrary, VirtualAlloc, WriteProcessMemory  
-- **Auto-generate** & embed a shellcode payload that downloads and executes a PE file  
+- Auto generate & embed a shellcode payload that downloads and executes a PE file  
 
 ---
 
