@@ -4,7 +4,7 @@ Proof of concept shellcode injector that uses clean syscalls to bypass user-mode
 
 ## Goals
 
-- **Activity obfuscation**  
+- Activity obfuscation  
 - Inject shellcode into a target process via raw syscalls  
 - Bypass common user-mode hooks on Win32 APIs LoadLibrary, VirtualAlloc, WriteProcessMemory  
 - Auto generate & embed a shellcode payload that downloads and executes a PE file  
@@ -13,7 +13,7 @@ Proof of concept shellcode injector that uses clean syscalls to bypass user-mode
 
 ##  How It Works
 
-1. Leverages the Windows Thread Pool API to hide the call-stack:  
+1. Leverages the Windows Thread Pool API to hide the call stack:  
    - The syscall appears to originate from a trusted region inside ntdll!TpWorker rather than from our code.  
 2. No direct native API calls are made; instead, the injector jumps to syscall stubs discovered in ntdll.
 
@@ -23,13 +23,13 @@ Proof of concept shellcode injector that uses clean syscalls to bypass user-mode
 
 | Path | Purpose |
 |------|---------|
-| `include/PEB.h` | Struct definitions for PEB / TEB / LDR_MODULE |
-| `include/Callbacks.h` | Prototypes & argument structs for the three syscalls |
-| `Callbacks.asm` | NASM routines: locate raw syscall stubs → unpack args → syscall; ret |
-| `Shellcode.h.template` | DSL (Intel syntax) between SHELLCODE_START / END markers |
-| `generate_shellcode_header.py` | Assembles the DSL → overwrites Shellcode.h with a byte array |
-| `main.cpp` | C++ wrapper: EnableDebugPrivilege, SSN lookup, Thread Pool callbacks, wrappers for<br>NtAllocateVirtualMemory, NtWriteVirtualMemory, NtCreateThreadEx |
-| `Makefile` | Automation: <br>1 Generate Shellcode.h <br>2 Assemble ASM routines<br>3 Compile & link → injector.exe |
+| include/PEB.h | Struct definitions for PEB / TEB / LDR_MODULE |
+| include/Callbacks.h | Prototypes & argument structs for the three syscalls |
+| Callbacks.asm | NASM routines: locate raw syscall stubs → unpack args → syscall; ret |
+| Shellcode.h.template | DSL Intel syntax between SHELLCODE_START / END markers |
+| generate_shellcode_header.py | Assembles the DSL → overwrites Shellcode.h with a byte array |
+| main.cpp | C++ wrapper: EnableDebugPrivilege, SSN lookup, Thread Pool callbacks, wrappers for<br>NtAllocateVirtualMemory, NtWriteVirtualMemory, NtCreateThreadEx |
+| Makefile | Automation: <br>1 Generate Shellcode.h <br>2 Assemble ASM routines<br>3 Compile & link → injector.exe |
 
 ---
 
